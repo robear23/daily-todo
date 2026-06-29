@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Habit & Accountability Tracker | ForestTech Solutions</title>
+  <meta name="description" content="Stay accountable, build daily habits, and hit your streaks. Designed by ForestTech Solutions.">
+  <link rel="stylesheet" href="style.css">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Canvas Confetti for completion celebration -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+  <div class="bg-glow"></div>
+
+  <div class="app-container">
+    <!-- Main Card -->
+    <main class="glass-card">
+      <!-- App Header -->
+      <header class="app-header">
+        <div class="brand-section">
+          <h1>Accountability Dashboard</h1>
+          <p id="current-date">Monday, June 29</p>
+        </div>
+        <div class="header-controls">
+          <button id="theme-toggle" class="btn-round" title="Toggle Theme" aria-label="Toggle Light/Dark Theme">
+            <i data-lucide="moon"></i>
+          </button>
+        </div>
+      </header>
+
+      <!-- Stats Grid -->
+      <section class="dashboard-grid">
+        <div class="stat-item glass-card" style="padding: 1rem; border-radius: 18px; margin: 0;">
+          <div class="stat-icon progress">
+            <!-- SVG Circular Progress -->
+            <div class="progress-ring-container">
+              <svg width="46" height="46">
+                <circle class="progress-ring-circle-bg" stroke="rgba(255, 255, 255, 0.05)" stroke-width="4" fill="transparent" r="18" cx="23" cy="23"/>
+                <circle id="progress-circle" class="progress-ring-circle" stroke="var(--color-accent)" stroke-width="4" fill="transparent" r="18" cx="23" cy="23" stroke-dasharray="113.09" stroke-dashoffset="113.09"/>
+              </svg>
+              <div id="progress-text" class="progress-ring-text">0%</div>
+            </div>
+          </div>
+          <div class="stat-info">
+            <div id="completion-ratio" class="stat-val">0/0</div>
+            <div class="stat-lbl">Completed</div>
+          </div>
+        </div>
+
+        <div class="stat-item glass-card" style="padding: 1rem; border-radius: 18px; margin: 0;">
+          <div class="stat-icon streak">
+            <i data-lucide="flame"></i>
+          </div>
+          <div class="stat-info">
+            <div id="streak-count" class="stat-val">0</div>
+            <div class="stat-lbl">Day Streak</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Celebration Banner (Dynamically shown when 100% complete) -->
+      <section id="celebration" class="celebration-banner hidden">
+        <div class="celebration-icon">
+          <i data-lucide="party-popper" style="color: var(--color-gold); width: 28px; height: 28px;"></i>
+        </div>
+        <div class="celebration-content">
+          <h4>Day Complete! 🎉</h4>
+          <p>Fantastic job! You've checked off all your daily tasks. Keep the streak burning!</p>
+        </div>
+      </section>
+
+      <!-- Task Input Form -->
+      <form id="add-task-form" class="add-task-form" style="margin-top: 1.5rem;">
+        <input type="text" id="task-input" class="input-field" placeholder="Add a new daily focus..." required autocomplete="off">
+        <button type="submit" class="btn-primary">
+          <i data-lucide="plus" style="width: 18px; height: 18px;"></i>
+          <span>Add</span>
+        </button>
+      </form>
+
+      <!-- Task List Title -->
+      <div class="task-list-section" style="margin-top: 2rem;">
+        <div class="task-list-title">
+          <span>Today's Actions</span>
+          <span id="task-count" style="font-size: 0.85rem; font-weight: 500;">0 tasks</span>
+        </div>
+
+        <!-- Task List Container -->
+        <div id="task-list" class="task-list">
+          <!-- Dynamically populated -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="empty-state" class="empty-state">
+          <div class="empty-icon">
+            <i data-lucide="clipboard-list" style="width: 48px; height: 48px;"></i>
+          </div>
+          <p>No tasks for today yet. Add your first goal above!</p>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
