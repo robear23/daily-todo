@@ -172,13 +172,13 @@ function render() {
       taskItem.className = `task-item ${task.completed ? 'completed' : ''}`;
       
       taskItem.innerHTML = `
-        <div class="task-left">
-          <div class="custom-checkbox ${task.completed ? 'checked' : ''}">
+        <label class="task-left" style="cursor: pointer;">
+          <span class="custom-checkbox ${task.completed ? 'checked' : ''}">
             <input type="checkbox" ${task.completed ? 'checked' : ''} data-id="${task.id}">
-            <i data-lucide="check" class="check-mark"></i>
-          </div>
+            <i data-lucide="check" class="check-mark" style="pointer-events: none;"></i>
+          </span>
           <span class="task-title">${escapeHTML(task.title)}</span>
-        </div>
+        </label>
         <button class="btn-delete" data-id="${task.id}" title="Delete Task" aria-label="Delete Task">
           <i data-lucide="trash-2" style="width: 18px; height: 18px;"></i>
         </button>
