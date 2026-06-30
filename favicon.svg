@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradient: Emerald Forest Theme -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#064e3b" />
+      <stop offset="100%" stop-color="#022c22" />
+    </linearGradient>
+    <!-- Flame Gradient: Orange to Gold -->
+    <linearGradient id="flameGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#ef4444" />
+      <stop offset="50%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#fbbf24" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Outer Squircle with fine border -->
+  <rect x="16" y="16" width="480" height="480" rx="128" fill="url(#bgGrad)" stroke="#10b981" stroke-width="8" />
+  
+  <!-- Flame Silhouette (representing habit streak) -->
+  <path d="M256 70 C280 160 370 210 370 310 C370 380 320 430 256 430 C192 430 142 380 142 310 C142 220 220 180 230 130 C200 160 180 210 180 260 C180 290 190 310 200 320 C180 300 170 270 170 240 C170 170 230 110 256 70 Z" fill="url(#flameGrad)" opacity="0.95" />
+  
+  <!-- Checkmark (representing completed tasks) -->
+  <path d="M190 280 L235 325 L325 210" stroke="#ffffff" stroke-width="36" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+</svg>
