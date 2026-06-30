@@ -19,6 +19,7 @@ let tasks = [];
 let streak = 0;
 let lastCompletedDate = ''; // 'YYYY-MM-DD'
 let lastVisitDate = ''; // 'YYYY-MM-DD'
+let editingTaskId = null;
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
@@ -169,20 +170,42 @@ function render() {
     
     tasks.forEach(task => {
       const taskItem = document.createElement('div');
-      taskItem.className = `task-item ${task.completed ? 'completed' : ''}`;
       
-      taskItem.innerHTML = `
-        <label class="task-left" style="cursor: pointer;">
-          <span class="custom-checkbox ${task.completed ? 'checked' : ''}">
-            <input type="checkbox" ${task.completed ? 'checked' : ''} data-id="${task.id}">
-            <i data-lucide="check" class="check-mark" style="pointer-events: none;"></i>
-          </span>
-          <span class="task-title">${escapeHTML(task.title)}</span>
-        </label>
-        <button class="btn-delete" data-id="${task.id}" title="Delete Task" aria-label="Delete Task">
-          <i data-lucide="trash-2" style="width: 18px; height: 18px;"></i>
-        </button>
-      `;
+      if (editingTaskId === task.id) {
+        taskItem.className = `task-item editing`;
+        taskItem.innerHTML = `
+          <div class="task-left">
+            <input type="text" class="edit-input" value="${escapeHTML(task.title)}" data-id="${task.id}">
+          </div>
+          <div class="task-actions">
+            <button class="btn-save" data-id="${task.id}" title="Save Task" aria-label="Save Task">
+              <i data-lucide="check" style="width: 18px; height: 18px;"></i>
+            </button>
+            <button class="btn-cancel" data-id="${task.id}" title="Cancel Edit" aria-label="Cancel Edit">
+              <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+            </button>
+          </div>
+        `;
+      } else {
+        taskItem.className = `task-item ${task.completed ? 'completed' : ''}`;
+        taskItem.innerHTML = `
+          <label class="task-left" style="cursor: pointer;">
+            <span class="custom-checkbox ${task.completed ? 'checked' : ''}">
+              <input type="checkbox" ${task.completed ? 'checked' : ''} data-id="${task.id}">
+              <i data-lucide="check" class="check-mark" style="pointer-events: none;"></i>
+            </span>
+            <span class="task-title">${escapeHTML(task.title)}</span>
+          </label>
+          <div class="task-actions">
+            <button class="btn-edit" data-id="${task.id}" title="Edit Task" aria-label="Edit Task">
+              <i data-lucide="edit-3" style="width: 18px; height: 18px;"></i>
+            </button>
+            <button class="btn-delete" data-id="${task.id}" title="Delete Task" aria-label="Delete Task">
+              <i data-lucide="trash-2" style="width: 18px; height: 18px;"></i>
+            </button>
+          </div>
+        `;
+      }
       
       taskListContainer.appendChild(taskItem);
     });
@@ -210,6 +233,70 @@ function setupTaskEventListeners() {
         task.completed = e.target.checked;
         saveTasks();
         updateStreakAndCompletion();
+        render();
+      }
+    });
+  });
+
+  // Edit button
+  const editBtns = taskListContainer.querySelectorAll('.btn-edit');
+  editBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      editingTaskId = btn.getAttribute('data-id');
+      render();
+      // Focus and select the input text
+      const input = taskListContainer.querySelector(`.edit-input[data-id="${editingTaskId}"]`);
+      if (input) {
+        input.focus();
+        input.select();
+      }
+    });
+  });
+
+  // Save action helper
+  const saveTask = (taskId, newTitle) => {
+    const task = tasks.find(t => t.id === taskId);
+    if (task) {
+      const titleText = newTitle.trim();
+      if (titleText) {
+        task.title = titleText;
+        saveTasks();
+        editingTaskId = null;
+        render();
+      }
+    }
+  };
+
+  // Save button
+  const saveBtns = taskListContainer.querySelectorAll('.btn-save');
+  saveBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const taskId = btn.getAttribute('data-id');
+      const input = taskListContainer.querySelector(`.edit-input[data-id="${taskId}"]`);
+      if (input) {
+        saveTask(taskId, input.value);
+      }
+    });
+  });
+
+  // Cancel button
+  const cancelBtns = taskListContainer.querySelectorAll('.btn-cancel');
+  cancelBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      editingTaskId = null;
+      render();
+    });
+  });
+
+  // Keydown listeners on edit inputs
+  const editInputs = taskListContainer.querySelectorAll('.edit-input');
+  editInputs.forEach(input => {
+    input.addEventListener('keydown', (e) => {
+      const taskId = input.getAttribute('data-id');
+      if (e.key === 'Enter') {
+        saveTask(taskId, input.value);
+      } else if (e.key === 'Escape') {
+        editingTaskId = null;
         render();
       }
     });
